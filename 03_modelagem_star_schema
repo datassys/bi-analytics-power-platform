@@ -1,0 +1,24 @@
+let
+    // 1. Definição do período do calendário (Ajuste as datas se necessário)
+    DataInicio = #date(2023, 1, 1),
+    DataFim = #date(2024, 12, 31),
+
+    // 2. Cálculo da quantidade total de dias
+    TotalDias = Duration.Days(DataFim - DataInicio) + 1,
+
+    // 3. Geração da lista de datas contínuas
+    ListaDatas = List.Dates(DataInicio, TotalDias, #duration(1, 0, 0, 0)),
+    TabelaInicial = Table.FromList(ListaDatas, Splitter.SplitByNothing(), {"Data"}, null, ExtraValues.Error),
+
+    // 4. Alteração do tipo da coluna principal para Date
+    TipoData = Table.TransformColumnTypes(TabelaInicial, {{"Data", type date}}),
+
+    // 5. Expansão dos atributos temporais
+    AdicionaAno = Table.AddColumn(TipoData, "Ano", each Date.Year([Data]), Int64.Type),
+    AdicionaMesNum = Table.AddColumn(AdicionaAno, "Mes_Num", each Date.Month([Data]), Int64.Type),
+    AdicionaNomeMes = Table.AddColumn(AdicionaMesNum, "Nome_Mes", each Text.Proper(Date.MonthName([Data])), type text),
+    AdicionaAnoMes = Table.AddColumn(AdicionaNomeMes, "Ano_Mes", each Text.From([Ano]) & "-" & Text.PadStart(Text.From([Mes_Num]), 2, "0"), type text),
+    AdicionaTrimestre = Table.AddColumn(AdicionaAnoMes, "Trimestre", each "Q" & Text.From(Date.QuarterOfYear([Data])), type text),
+    AdicionaDiaSemana = Table.AddColumn(AdicionaTrimestre, "Dia_Semana", each Text.Proper(Date.DayOfWeekName([Data])), type text)
+in
+    AdicionaDiaSemana
