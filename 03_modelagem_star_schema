@@ -22,3 +22,4 @@ let
     AdicionaDiaSemana = Table.AddColumn(AdicionaTrimestre, "Dia_Semana", each Text.Proper(Date.DayOfWeekName([Data])), type text)
 in
     AdicionaDiaSemana
+
