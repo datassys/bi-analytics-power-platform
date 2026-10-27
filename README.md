@@ -26,3 +26,17 @@ Nesta etapa, a camada de extração e transformação foi desenvolvida utilizand
 * **Parametrização Dinâmica de Ambientes:** Implementação de variáveis de ambiente para chaveamento automático de conexões de dados entre ambientes (DEV, HOMOLOG, PROD).
 * **Tratamento Cultural de Dados (pt-BR):** Padronização e sanitização de formatos numéricos e temporais locais e internacionais.
 ---
+
+---
+
+## Módulo 2: Modelagem Dimensional (Star Schema) & DAX
+
+Nesta etapa, estruturamos a modelagem dimensional no padrão **Star Schema**, garantindo performance e integridade analítica para as consultas no Power BI.
+
+### Destaques Técnicos da Implementação:
+- **Modelo Relacional:** Construção da tabela dimensão de calendário (`dData`) conectada à tabela fato (`fVendas`) com relacionamento $1:N$ e filtro único.
+- **Governança do Modelo:** Configuração de colunas não agregáveis (ex: `Ano`) como *Não Resumir* para evitar somas indevidas de metadados.
+- **Medidas Analíticas (DAX):**
+  - `Total Faturamento`: Soma total das vendas (`SUM`).
+  - `Total Unidades`: Totalização do volume de itens vendidos.
+  - `Ticket Medio`: Cálculo defensivo utilizando a função `DIVIDE` para prevenção de erros de divisão por zero.
